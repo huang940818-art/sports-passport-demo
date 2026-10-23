@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>屏時多動動 樣品</title>
+<style>
+:root{
+  --bg:#eef1ec; --card:#ffffff; --ink:#1d2a24; --sub:#5b6b63; --line:#dde3de;
+  --main:#1f7a5a; --main-soft:#e3f1ea; --warm:#e8913a; --warm-soft:#fcefe0;
+  --danger:#c2453a; --fs:16px;
+}
+:root[data-contrast="high"]{
+  --bg:#000; --card:#111; --ink:#fff; --sub:#e6e6e6; --line:#666;
+  --main:#ffd23f; --main-soft:#2a2500; --warm:#ffd23f; --warm-soft:#2a2500;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--fs)/1.55 -apple-system,"PingFang TC","Noto Sans TC",sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:16px}
+.top button{border:1px solid var(--line);background:var(--card);padding:8px 16px;border-radius:999px}
+.top button.on{background:var(--main);color:#fff;border-color:var(--main)}
+:root[data-contrast="high"] .top button.on{color:#000}
+.note{text-align:center;color:var(--sub);font-size:.8em;margin:-6px 0 12px}
+.view{display:none}.view.on{display:block}
+
+/* 手機框 */
+.phone{width:min(390px,100% - 32px);margin:0 auto 32px;background:var(--bg);border:10px solid #1a1a1a;border-radius:44px;overflow:hidden;height:780px;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.18)}
+.screen{flex:1;overflow-y:auto;padding:18px 16px 24px}
+.tabs{display:flex;border-top:1px solid var(--line);background:var(--card)}
+.tabs button{flex:1;border:0;background:none;padding:10px 0 14px;font-size:.78em;color:var(--sub)}
+.tabs button.on{color:var(--main);font-weight:700}
+.page{display:none}.page.on{display:block}
+h1{font-size:1.35em;margin:4px 0 2px}
+h2{font-size:1.05em;margin:20px 0 8px}
+.sub{color:var(--sub);font-size:.85em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.big{font-size:2.2em;font-weight:800;line-height:1.1}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75em;background:var(--main-soft);color:var(--main)}
+.pill.warm{background:var(--warm-soft);color:var(--warm)}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--main)}
+.btn{border:0;background:var(--main);color:#fff;border-radius:12px;padding:10px 16px;font-weight:700}
+:root[data-contrast="high"] .btn{color:#000}
+.btn.ghost{background:var(--main-soft);color:var(--main)}
+.btn:disabled{opacity:.45}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.badge{text-align:center;padding:10px 4px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:.75em}
+.badge .dot{width:44px;height:44px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;font-weight:800;color:#fff;background:var(--main)}
+.badge.lock{opacity:.4}.badge.lock .dot{background:var(--sub)}
+.week{display:flex;align-items:flex-end;gap:6px;height:110px;margin-top:10px}
+.week div{flex:1;text-align:center;font-size:.7em;color:var(--sub)}
+.week b{display:block;background:var(--main);border-radius:6px 6px 0 0;margin-bottom:4px}
+.seg{display:flex;background:var(--line);border-radius:12px;padding:3px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;padding:6px;border-radius:9px}
+.seg button.on{background:var(--card);font-weight:700}
+.rank{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.rank .n{min-width:52px;font-weight:800;color:var(--main)}
+.rank.me{background:var(--main-soft);border-radius:10px;padding:8px}
+.qr{width:170px;height:170px;margin:12px auto;background:
+  repeating-linear-gradient(90deg,var(--ink) 0 8px,transparent 8px 14px),
+  repeating-linear-gradient(0deg,var(--ink) 0 6px,transparent 6px 13px);
+  background-blend-mode:difference;border:10px solid var(--card);outline:1px solid var(--line);border-radius:8px}
+.code{font:700 1.6em ui-monospace,Menlo,monospace;letter-spacing:.15em;text-align:center}
+.toggle{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.sw{width:46px;height:26px;border-radius:13px;background:var(--line);position:relative;border:0}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:var(--main)}.sw.on::after{left:23px}
+.toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+
+/* 後台 */
+.admin{max-width:1100px;margin:0 auto 40px;padding:0 16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+table{width:100%;border-collapse:collapse;font-size:.9em}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--sub);font-weight:600}
+.cols{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.flag{color:var(--danger);font-weight:700}
+input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;width:100%;background:var(--card);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <button class="on" data-view="app">民眾 App</button>
+  <button data-view="shop">合作店家</button>
+  <button data-view="admin">管理後台</button>
+</div>
+<p class="note">樣品・畫面與資料皆為示意</p>
+
+<!-- ============ 民眾 App ============ -->
+<section class="view on" id="v-app">
+<div class="phone">
+ <div class="screen">
+
+  <div class="page on" id="p-home">
+    <div class="sub">早安</div>
+    <h1>屏時多動動</h1>
+    <div class="card">
+      <div class="row"><span class="sub">今天步數</span><span class="pill">已同步 Apple 健康</span></div>
+      <div class="big" id="steps">6,482</div>
+      <div class="bar"><i style="width:65%"></i></div>
+      <div class="sub" style="margin-top:6px">目標 10,000 步・再走 3,518 步拿 20 點</div>
+    </div>
+    <div class="card row">
+      <div><div class="sub">我的點數</div><div class="big" id="pts">340</div></div>
+      <button class="btn ghost" data-go="p-shop">去兌換</button>
+    </div>
+    <h2>今日任務</h2>
+    <div class="card row"><div><b>走滿 10,000 步</b><div class="sub">+20 點</div></div><span class="pill warm">進行中</span></div>
+    <div class="card row"><div><b>到任一運動點打卡</b><div class="sub">+30 點</div></div><button class="btn" data-go="p-map">打卡</button></div>
+    <div class="card row"><div><b>完成一次體適能檢測</b><div class="sub">+50 點・解鎖「體能達人」徽章</div></div><span class="pill">本月</span></div>
+  </div>
+
+  <div class="page" id="p-map">
+    <h1>活動打卡</h1>
+    <div class="sub">到現場才能打卡（定位 50 公尺內）</div>
+    <h2>附近的運動點</h2>
+    <div id="spots"></div>
+    <h2>我的徽章</h2>
+    <div class="grid3" id="badges"></div>
+  </div>
+
+  <div class="page" id="p-health">
+    <h1>個人健康專區</h1>
+    <div class="sub">資料自動從手機、手錶同步，不用截圖上傳</div>
+    <div class="card">
+      <div class="row"><b>這週步數</b><span class="sub">平均 7,940 步</span></div>
+      <div class="week" id="week"></div>
+    </div>
+    <div class="card">
+      <b>體適能紀錄</b>
+      <table>
+        <tr><th>項目</th><th>上次</th><th>這次</th></tr>
+        <tr><td>3 分鐘登階</td><td>指數 52</td><td>指數 58</td></tr>
+        <tr><td>坐姿體前彎</td><td>18 cm</td><td>22 cm</td></tr>
+        <tr><td>一分鐘仰臥起坐</td><td>24 下</td><td>29 下</td></tr>
+      </table>
+      <div class="sub" style="margin-top:8px">來源：屏東縣體適能檢測站 2027/05/12</div>
+    </div>
+    <div class="card row"><div><b>資料來源</b><div class="sub">Apple 健康・Garmin</div></div><button class="btn ghost">管理</button></div>
+  </div>
+
+  <div class="page" id="p-shop">
+    <h1>點數兌換</h1>
+    <div class="sub">目前 <b id="pts2">340</b> 點</div>
+    <div id="items"></div>
+    <div class="card" id="voucher" style="display:none;text-align:center">
+      <b id="vname"></b>
+      <div class="qr"></div>
+      <div class="code" id="vcode"></div>
+      <div class="sub">給店家掃碼或輸入代碼，一組代碼只能用一次</div>
+    </div>
+  </div>
+
+  <div class="page" id="p-rank">
+    <h1>排行榜</h1>
+    <div class="seg"><button class="on" data-rk="0">一般組</button><button data-rk="1">身障組</button></div>
+    <div class="seg"><button class="on" data-rt="0">本週步數</button><button data-rt="1">累積點數</button></div>
+    <div id="ranks"></div>
+  </div>
+
+  <div class="page" id="p-me">
+    <h1>我的</h1>
+    <div class="card">
+      <b>陪同者推薦碼</b>
+      <div class="sub">邀請家人朋友一起動，對方完成第一個任務，你們各拿 50 點</div>
+      <div class="code" style="margin:10px 0">PT8K2Q</div>
+      <button class="btn ghost" style="width:100%" onclick="toast('已複製推薦碼')">複製推薦碼</button>
+    </div>
+    <div class="card">
+      <b>無障礙</b>
+      <div class="toggle"><span>大字模式</span><button class="sw" id="sw-big"></button></div>
+      <div class="toggle"><span>高對比</span><button class="sw" id="sw-con"></button></div>
+      <div class="toggle"><span>易讀版說明</span><button class="sw" id="sw-easy"></button></div>
+      <div class="sub" style="margin-top:8px">支援 VoiceOver／TalkBack 螢幕報讀</div>
+    </div>
+    <div class="card"><b>個資與隱私</b><div class="sub">查看我被收集的資料、下載、或刪除帳號</div></div>
+  </div>
+
+ </div>
+ <nav class="tabs">
+   <button class="on" data-go="p-home">首頁</button>
+   <button data-go="p-map">打卡</button>
+   <button data-go="p-health">健康</button>
+   <button data-go="p-shop">兌換</button>
+   <button data-go="p-rank">排行</button>
+   <button data-go="p-me">我的</button>
+ </nav>
+</div>
+</section>
+
+<!-- ============ 合作店家 ============ -->
+<section class="view" id="v-shop">
+<div class="phone">
+ <div class="screen">
+   <div class="sub">合作店家</div>
+   <h1>萬年溪豆花</h1>
+   <div class="card">
+     <b>核銷兌換券</b>
+     <div class="sub">掃民眾的 QR Code，或輸入 6 碼代碼</div>
+     <input id="redeem" placeholder="例：先在民眾 App 兌換，再把代碼貼過來" style="margin:10px 0">
+     <button class="btn" style="width:100%" id="doRedeem">確認核銷</button>
+     <div id="rmsg" class="sub" style="margin-top:8px"></div>
+   </div>
+   <h2>今天核銷</h2>
+   <div id="shoplog"></div>
+   <div class="card row"><div><div class="sub">本月核銷</div><div class="big" id="shopcount">27</div></div><div class="sub">每月 5 日<br>對帳撥款</div></div>
+ </div>
+</div>
+</section>
+
+<!-- ============ 管理後台 ============ -->
+<section class="view" id="v-admin">
+<div class="admin">
+  <h1>管理後台</h1>
+  <div class="sub" style="margin-bottom:12px">活動期 2027/4/1–9/30・資料更新到 2027/06/18 09:00</div>
+  <div class="kpis">
+    <div class="card"><div class="sub">註冊人數</div><div class="big">18,426</div><div class="sub">本週 +1,203</div></div>
+    <div class="card"><div class="sub">本週活躍</div><div class="big">9,871</div><div class="sub">53.6%</div></div>
+    <div class="card"><div class="sub">累積步數</div><div class="big">2.14 億</div><div class="sub">平均每人 11,620 步／天</div></div>
+    <div class="card"><div class="sub">兌換券核銷</div><div class="big">3,582</div><div class="sub">核銷率 81%</div></div>
+  </div>
+  <div class="cols" style="margin-top:12px">
+    <div class="card">
+      <b>各鄉鎮參與人數（前 6）</b>
+      <table id="towns"></table>
+    </div>
+    <div class="card">
+      <b>防弊警示</b>
+      <div class="sub">系統自動標出，人工確認後才處理</div>
+      <table>
+        <tr><th>帳號</th><th>原因</th><th></th></tr>
+        <tr><td>U-30871</td><td class="flag">單日 9.8 萬步</td><td><button class="btn ghost">查看</button></td></tr>
+        <tr><td>U-11520</td><td class="flag">10 分鐘內兩地打卡（相距 42 km）</td><td><button class="btn ghost">查看</button></td></tr>
+        <tr><td>U-07734</td><td class="flag">同一裝置綁 4 個帳號</td><td><button class="btn ghost">查看</button></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="card">
+      <div class="row"><b>任務與活動</b><button class="btn" onclick="toast('樣品：新增活動')">新增活動</button></div>
+      <table>
+        <tr><th>名稱</th><th>點數</th><th>期間</th><th>完成人數</th></tr>
+        <tr><td>每日一萬步</td><td>20</td><td>常態</td><td>4,210／天</td></tr>
+        <tr><td>大鵬灣環灣打卡</td><td>30</td><td>4/1–9/30</td><td>2,876</td></tr>
+        <tr><td>體適能檢測</td><td>50</td><td>每月</td><td>1,134</td></tr>
+        <tr><td>端午龍舟健走</td><td>80</td><td>6/12–6/20</td><td>965</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <b>合作店家</b>
+      <table>
+        <tr><th>店家</th><th>本月核銷</th></tr>
+        <tr><td>萬年溪豆花</td><td>27</td></tr>
+        <tr><td>勝利星村咖啡</td><td>64</td></tr>
+        <tr><td>東港運動用品</td><td>18</td></tr>
+        <tr><td>恆春冰菓室</td><td>41</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let pts=340;
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
+function setPts(){$('#pts').textContent=pts;$('#pts2').textContent=pts;renderItems()}
+
+$$('.top button').forEach(b=>b.onclick=()=>{
+  $$('.top button').forEach(x=>x.classList.toggle('on',x===b));
+  $$('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.view));
+});
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(!g)return;
+  $$('.page').forEach(p=>p.classList.toggle('on',p.id===g.dataset.go));
+  $$('.tabs button').forEach(t=>t.classList.toggle('on',t.dataset.go===g.dataset.go));
+  $('#v-app .screen').scrollTop=0;
+});
+
+// 打卡
+const spots=[
+  {n:'屏東公園',d:'0.3 km',p:30,in:true},
+  {n:'萬年溪親水步道',d:'0.8 km',p:30,in:false},
+  {n:'勝利星村',d:'1.6 km',p:30,in:false},
+  {n:'大鵬灣環灣自行車道',d:'24 km',p:50,in:false},
+];
+const badges=[['新手','第一次打卡',1],['萬步','單日一萬步',1],['連續 7 天','連續達標',1],['五地','打卡 5 個點',0],['體能達人','完成檢測',0],['全縣走透透','33 鄉鎮',0]];
+function renderSpots(){
+  $('#spots').innerHTML=spots.map((s,i)=>`<div class="card row"><div><b>${s.n}</b><div class="sub">${s.d}・+${s.p} 點</div></div>
+  <button class="btn" ${s.done||!s.in?'disabled':''} onclick="checkin(${i})">${s.done?'已打卡':s.in?'打卡':'太遠'}</button></div>`).join('');
+  $('#badges').innerHTML=badges.map(b=>`<div class="badge ${b[2]?'':'lock'}"><div class="dot">${b[0].slice(0,2)}</div><b>${b[0]}</b><div class="sub">${b[1]}</div></div>`).join('');
+}
+function checkin(i){spots[i].done=true;pts+=spots[i].p;setPts();renderSpots();toast(`${spots[i].n} 打卡成功，+${spots[i].p} 點`)}
+
+// 健康
+const wk=[['一',8120],['二',6210],['三',10340],['四',9050],['五',6482],['六',0],['日',0]];
+$('#week').innerHTML=wk.map(([d,v])=>`<div><b style="height:${v/110}px"></b>${d}</div>`).join('');
+
+// 兌換
+const items=[
+  {n:'萬年溪豆花 一碗',p:120},{n:'勝利星村咖啡 中杯美式',p:200},
+  {n:'東港運動用品 百元折價券',p:300},{n:'恆春冰菓室 招牌刨冰',p:500},
+];
+const vouchers={};
+function renderItems(){
+  $('#items').innerHTML=items.map((it,i)=>`<div class="card row"><div><b>${it.n}</b><div class="sub">${it.p} 點</div></div>
+  <button class="btn" ${pts<it.p?'disabled':''} onclick="redeemItem(${i})">兌換</button></div>`).join('');
+}
+function redeemItem(i){
+  const it=items[i]; pts-=it.p; setPts();
+  const code=Math.random().toString(36).slice(2,8).toUpperCase();
+  vouchers[code]={n:it.n,used:false};
+  $('#voucher').style.display='block';$('#vname').textContent=it.n;$('#vcode').textContent=code;
+  $('#redeem').value=code;
+  toast('兌換成功，到店出示代碼');
+}
+
+// 店家核銷
+const shoplog=[['10:12','萬年溪豆花 一碗'],['09:40','萬年溪豆花 一碗']];
+function renderShop(){$('#shoplog').innerHTML=shoplog.map(([t,n])=>`<div class="card row"><span>${n}</span><span class="sub">${t}</span></div>`).join('')}
+$('#doRedeem').onclick=()=>{
+  const c=$('#redeem').value.trim().toUpperCase(), v=vouchers[c], m=$('#rmsg');
+  if(!v){m.innerHTML='<span class="flag">查無此代碼</span>';return}
+  if(v.used){m.innerHTML='<span class="flag">這組代碼已經用過了</span>';return}
+  v.used=true; const t=new Date().toTimeString().slice(0,5);
+  shoplog.unshift([t,v.n]); renderShop(); $('#shopcount').textContent=+$('#shopcount').textContent+1;
+  m.textContent=`核銷成功：${v.n}`;
+};
+
+// 排行
+const ranks=[
+  [['屏東市 王○明',98210],['潮州鎮 林○君',91550],['東港鎮 陳○宏',88730],['恆春鎮 李○芳',85020],['內埔鄉 黃○傑',80400]],
+  [['屏東市 張○華',52300],['萬丹鄉 吳○婷',49870],['里港鄉 蔡○安',45210],['佳冬鄉 許○誠',40130],['枋寮鄉 鄭○雅',38690]],
+];
+let rk=0, rt=0;
+function renderRanks(){
+  const list=ranks[rk].map(([n,v])=>[n,rt?Math.round(v/60):v]);
+  $('#ranks').innerHTML=list.map(([n,v],i)=>`<div class="rank"><span class="n">${i+1}</span><span style="flex:1">${n}</span><b>${v.toLocaleString()}</b></div>`).join('')
+   + `<div class="rank me"><span class="n">${rk?'—':'1,287'}</span><span style="flex:1">我</span><b>${rk?'未參加此組':(rt?pts:55640).toLocaleString()}</b></div>`;
+}
+$$('[data-rk]').forEach(b=>b.onclick=()=>{rk=+b.dataset.rk;$$('[data-rk]').forEach(x=>x.classList.toggle('on',x===b));renderRanks()});
+$$('[data-rt]').forEach(b=>b.onclick=()=>{rt=+b.dataset.rt;$$('[data-rt]').forEach(x=>x.classList.toggle('on',x===b));renderRanks()});
+
+// 無障礙
+$('#sw-big').onclick=e=>{const on=e.target.classList.toggle('on');document.documentElement.style.setProperty('--fs',on?'20px':'16px')};
+$('#sw-con').onclick=e=>{const on=e.target.classList.toggle('on');document.documentElement.dataset.contrast=on?'high':''};
+$('#sw-easy').onclick=e=>{const on=e.target.classList.toggle('on');toast(on?'說明改成短句與圖示版':'回到一般說明')};
+
+// 後台鄉鎮
+const towns=[['屏東市',4820],['潮州鎮',1630],['東港鎮',1290],['內埔鄉',1180],['恆春鎮',1040],['萬丹鄉',960]];
+$('#towns').innerHTML='<tr><th>鄉鎮</th><th>人數</th><th></th></tr>'+towns.map(([t,n])=>`<tr><td>${t}</td><td>${n.toLocaleString()}</td><td style="width:45%"><div class="bar"><i style="width:${n/48.2}%"></i></div></td></tr>`).join('');
+
+renderSpots();renderItems();renderShop();renderRanks();
+</script>
+</body>
+</html>
