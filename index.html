@@ -72,9 +72,12 @@ h2{font-size:1.05em;margin:20px 0 8px}
 
 /* 後台 */
 .admin{max-width:1100px;margin:0 auto 40px;padding:0 16px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 table{width:100%;border-collapse:collapse;font-size:.9em}
-th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.btn{white-space:nowrap}
+.tw{overflow-x:auto}
+@media (max-width:480px){.admin table{font-size:.82em}th,td{padding:8px 5px}.admin .btn.ghost{padding:6px 10px}}
 th{color:var(--sub);font-weight:600}
 .cols{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
 @media (max-width:760px){.cols{grid-template-columns:1fr}}
@@ -235,7 +238,7 @@ input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:
       <table>
         <tr><th>帳號</th><th>原因</th><th></th></tr>
         <tr><td>U-30871</td><td class="flag">單日 9.8 萬步</td><td><button class="btn ghost">查看</button></td></tr>
-        <tr><td>U-11520</td><td class="flag">10 分鐘內兩地打卡（相距 42 km）</td><td><button class="btn ghost">查看</button></td></tr>
+        <tr><td>U-11520</td><td class="flag">兩地打卡相距 42 km</td><td><button class="btn ghost">查看</button></td></tr>
         <tr><td>U-07734</td><td class="flag">同一裝置綁 4 個帳號</td><td><button class="btn ghost">查看</button></td></tr>
       </table>
     </div>
@@ -245,7 +248,7 @@ input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:
       <div class="row"><b>任務與活動</b><button class="btn" onclick="toast('樣品：新增活動')">新增活動</button></div>
       <table>
         <tr><th>名稱</th><th>點數</th><th>期間</th><th>完成人數</th></tr>
-        <tr><td>每日一萬步</td><td>20</td><td>常態</td><td>4,210／天</td></tr>
+        <tr><td>每日一萬步</td><td>20</td><td>常態</td><td>4,210/天</td></tr>
         <tr><td>大鵬灣環灣打卡</td><td>30</td><td>4/1–9/30</td><td>2,876</td></tr>
         <tr><td>體適能檢測</td><td>50</td><td>每月</td><td>1,134</td></tr>
         <tr><td>端午龍舟健走</td><td>80</td><td>6/12–6/20</td><td>965</td></tr>
